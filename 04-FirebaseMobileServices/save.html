@@ -35,7 +35,7 @@
         firebase.analytics();
         
         const db = firebase.firestore();
-        const dataObj = db.collection('save').doc('people'); 
+        const dataObj = db.collection('save').doc('people');
 
         document.addEventListener("DOMContentLoaded", event => {  
             dataObj.get().then(doc => {
@@ -43,14 +43,26 @@
 
                 $.getJSON('MOCK_DATA.json', function (data) {
                     $.each(data, function (k, v) {
-                        let ids = {};
-                        ids = v.id;
-                        db.collection('save').set({ ids });
-                        db.collection('save').doc( 'people' ).update({ first_name: v.first_name, last_name: v.last_name, email: v.email,  gender: v.gender })
+
+                        db.collection( 'people' ).doc( v.id.toString() ).set({
+                            id: v.id,
+                            name: v.first_name,
+                            surname: v.last_name,
+                            email: v.email,
+                            gender: v.gender
+                        })
+                        .then(function() {
+                            console.log("Document successfully written!");
+                        })
+                        .catch(function(error) {
+                            console.error("Error writing document: ", error);
+                        });
+
                     });
                 });
-                //    dataObj.update({ id: id, name: name, lastName: LastName, email: email,  gender: gender});
             });
+
+
         });
 
     </script>

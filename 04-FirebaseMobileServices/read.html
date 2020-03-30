@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js"></script>
+
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <script src="http://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<table id="table">
+
+</table>
+
+<script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDxPF_K0qiOCXHRZv4uRCiOBbyQ2KbjuDw",
+            authDomain: "sample-project-cf003.firebaseapp.com",
+            databaseURL: "https://sample-project-cf003.firebaseio.com",
+            projectId: "sample-project-cf003",
+            storageBucket: "sample-project-cf003.appspot.com",
+            messagingSenderId: "763409400548",
+            appId: "1:763409400548:web:a9426db7a1fd531c1b62f1",
+            measurementId: "G-YJZSVRZY2P"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+
+        function getPerson(i, db) {
+            const dataObj = db.collection('people').doc(i.toString());
+            return dataObj.get()
+        }
+
+
+        async function getPeople(db) {
+            let  people = [];
+            let amount = 501;
+
+            for (let i = 1; i < amount; i++){
+                await getPerson(i, db).then(r => {
+                    const data = r.data();
+                    let person = [data.id, data.name, data.surname, data.email, data.gender];
+                    people.push(person);
+                })
+                $('#progress').text(`loading... ${i}/${amount}`);
+            }
+
+            return await people
+        }
+
+
+        function createTable(data) {
+            $('#table').DataTable({
+                data: data,
+                columns: [
+                    { title: "id" },
+                    { title: "name" },
+                    { title: "surname" },
+                    { title: "email" },
+                    { title: "gender"}
+                ]
+            });
+        }
+
+
+        function removeProgress() {
+            $('#progress').remove()
+        }
+
+
+        document.addEventListener("DOMContentLoaded", event => {
+            const db = firebase.firestore();
+
+            getPeople(db).then(r => {
+                createTable(r);
+                removeProgress();
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
+
+
+
