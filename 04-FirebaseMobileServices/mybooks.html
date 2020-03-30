@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDxPF_K0qiOCXHRZv4uRCiOBbyQ2KbjuDw",
+            authDomain: "sample-project-cf003.firebaseapp.com",
+            databaseURL: "https://sample-project-cf003.firebaseio.com",
+            projectId: "sample-project-cf003",
+            storageBucket: "sample-project-cf003.appspot.com",
+            messagingSenderId: "763409400548",
+            appId: "1:763409400548:web:a9426db7a1fd531c1b62f1",
+            measurementId: "G-YJZSVRZY2P"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+
+        document.addEventListener("DOMContentLoaded", event => {
+            // const app = firebase.app();
+            const db = firebase.firestore();
+
+            const dataObj = db.collection('books').doc('books');     
+            
+            dataObj.get().then(doc => {
+                const data = doc.data();
+                const fields = ['name', 'surname', 'title', 'year', 'genre', 'ISBN'];
+
+                for (field in fields) {
+                    document.write(data[fields[field]] + `<br>`);
+                };
+            })
+        })
+    </script>
+
+</body>
+</html>
+
+
+

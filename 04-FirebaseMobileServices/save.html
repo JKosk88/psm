@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous">
+    </script>
+    
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDxPF_K0qiOCXHRZv4uRCiOBbyQ2KbjuDw",
+            authDomain: "sample-project-cf003.firebaseapp.com",
+            databaseURL: "https://sample-project-cf003.firebaseio.com",
+            projectId: "sample-project-cf003",
+            storageBucket: "sample-project-cf003.appspot.com",
+            messagingSenderId: "763409400548",
+            appId: "1:763409400548:web:a9426db7a1fd531c1b62f1",
+            measurementId: "G-YJZSVRZY2P"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        
+        const db = firebase.firestore();
+        const dataObj = db.collection('save').doc('people'); 
+
+        document.addEventListener("DOMContentLoaded", event => {  
+            dataObj.get().then(doc => {
+                const data = doc.data();
+
+                $.getJSON('MOCK_DATA.json', function (data) {
+                    $.each(data, function (k, v) {
+                        let ids = {};
+                        ids = v.id;
+                        db.collection('save').set({ ids });
+                        db.collection('save').doc( 'people' ).update({ first_name: v.first_name, last_name: v.last_name, email: v.email,  gender: v.gender })
+                    });
+                });
+                //    dataObj.update({ id: id, name: name, lastName: LastName, email: email,  gender: gender});
+            });
+        });
+
+    </script>
+
+</body>
+</html>
+
+
+

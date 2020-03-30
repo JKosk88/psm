@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js"></script>
+    
+    <div id="divToAppendBookData">
+        
+    </div>
+    
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDxPF_K0qiOCXHRZv4uRCiOBbyQ2KbjuDw",
+            authDomain: "sample-project-cf003.firebaseapp.com",
+            databaseURL: "https://sample-project-cf003.firebaseio.com",
+            projectId: "sample-project-cf003",
+            storageBucket: "sample-project-cf003.appspot.com",
+            messagingSenderId: "763409400548",
+            appId: "1:763409400548:web:a9426db7a1fd531c1b62f1",
+            measurementId: "G-YJZSVRZY2P"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        
+        const db = firebase.firestore();
+        const dataObj = db.collection('books').doc('books'); 
+
+        document.addEventListener("DOMContentLoaded", event => {  
+            dataObj.get().then(doc => {
+                const data = doc.data();
+                const fields = ['name', 'surname', 'bookTitle', 'year', 'genre', 'ISBN'];
+
+                for (field in fields) {
+                    document.getElementById("divToAppendBookData").appendChild(document.createElement(fields[field]));
+                    document.getElementsByTagName(fields[field])[0].innerHTML += data[fields[field]] + `<br>`;
+
+                };
+            });
+        });
+
+        function updateBookData(e) {
+            let data = {};
+            data[e.target.name] = e.target.value
+            dataObj.update( data );
+            document.getElementsByTagName(e.target.name)[0].innerHTML = e.target.value + ` <br>`;
+        };
+
+    </script>
+    
+   <label>name: <input name="name" onchange="updateBookData(event)"><br></label>
+   <label>surname: <input name="surname" onchange="updateBookData(event)"><br></label>
+   <label>book title: <input name="bookTitle" onchange="updateBookData(event)"><br></label>   
+   <label>year: <input name="year" onchange="updateBookData(event)"><br></label>
+   <label>genre: <input name="genre" onchange="updateBookData(event)"><br></label>
+   <label>ISBN: <input name="ISBN" onchange="updateBookData(event)"></label>
+
+
+</body>
+</html>
+
+
+
